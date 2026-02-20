@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molda AI | Demostración de Roles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'molda-obsidian': '#0A0A0A',
+                        'molda-orange': '#FF4D00',
+                        'molda-gunmetal': '#1A1A1A',
+                        'molda-silver': '#333333',
+                        'molda-white': '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    borderRadius: { 'brand': '1.25rem' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0A0A0A;
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,77,0,0.06) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transition: all 0.4s ease;
+        }
+        .light body {
+            background: #f9fafb;
+            color: #111827;
+            background-image: none;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.035);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(0,0,0,0.07);
+        }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #FF4D00; border-radius: 0; }
+        .light ::-webkit-scrollbar-track { background: #f3f4f6; }
+        .light ::-webkit-scrollbar-thumb { background: #FF4D00; }
+    </style>
+</head>
+<body class="text-molda-white font-sans antialiased selection:bg-molda-orange selection:text-black min-h-screen">
+
+    <button id="themeToggle" class="fixed top-5 right-6 z-50 w-11 h-11 rounded-full bg-molda-orange/90 flex items-center justify-center text-2xl shadow-xl hover:scale-110 transition-all">
+        <span class="dark:hidden">☀️</span>
+        <span class="hidden dark:inline">🌙</span>
+    </button>
+
+    <main class="min-h-screen flex flex-col items-center p-6 pt-20">
+        <h1 class="font-display text-5xl md:text-7xl font-bold text-center mb-6">
+            Molda <span class="text-molda-orange">Live</span> – Demostración
+        </h1>
+        <p class="text-center opacity-70 mb-8 text-lg max-w-2xl">
+            Cambia el rol del asistente para ver cómo Molda AI se adapta instantáneamente a diferentes negocios o enfoques
+        </p>
+
+        <!-- Botones de roles -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button data-role="molda" class="role-btn px-5 py-2.5 bg-molda-orange/80 hover:bg-molda-orange rounded-full text-sm font-medium transition active:scale-95">Molda AI Oficial</button>
+            <button data-role="restaurante" class="role-btn px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-full text-sm font-medium transition active:scale-95">Restaurante</button>
+            <button data-role="clinica" class="role-btn px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-full text-sm font-medium transition active:scale-95">Clínica / Doctor</button>
+            <button data-role="cobranzas" class="role-btn px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-full text-sm font-medium transition active:scale-95">Cobranzas</button>
+            <button data-role="ecommerce" class="role-btn px-5 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-full text-sm font-medium transition active:scale-95">Tienda Online</button>
+            <button data-role="coach" class="role-btn px-5 py-2.5 bg-molda-orange/60 hover:bg-molda-orange rounded-full text-sm font-medium transition active:scale-95">Coach Finanzas Energéticas</button>
+        </div>
+
+        <div class="w-full max-w-4xl">
+            <div class="glass-panel rounded-3xl overflow-hidden border border-molda-silver/25 shadow-2xl flex flex-col h-[700px]">
+                <div id="chat-header" class="bg-black/35 p-6 border-b border-molda-silver/25 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+                        <span id="assistant-title" class="font-mono text-base uppercase tracking-widest font-bold">Molda Assistant • Groq</span>
+                    </div>
+                    <div class="font-mono text-sm opacity-50">Free Tier</div>
+                </div>
+
+                <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6 bg-black/25">
+                    <div class="flex flex-col items-start">
+                        <div class="glass-panel px-6 py-5 rounded-2xl rounded-bl-none max-w-[85%] text-base leading-relaxed">
+                            ¡Hola! Elige un rol arriba para comenzar.<br><br>
+                            Cada botón cambia completamente mi personalidad y enfoque para simular diferentes escenarios o acompañamientos.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-black/35 border-t border-molda-silver/25">
+                    <form id="chat-form" class="flex gap-4">
+                        <input id="user-input" type="text" placeholder="Escribe tu mensaje..." class="flex-1 bg-black/50 border border-molda-silver/30 rounded-full px-6 py-4 text-base focus:border-molda-orange focus:outline-none transition placeholder:opacity-60">
+                        <button type="submit" class="bg-molda-orange p-4 rounded-full hover:brightness-110 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('light');
+            localStorage.setItem('theme', html.classList.contains('light') ? 'light' : 'dark');
+        });
+        if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            html.classList.add('light');
+        }
+
+        // Configuración de roles
+        const roles = {
+            molda: {
+                title: "Molda AI Oficial • Groq",
+                prompt: `Eres el asistente oficial de Molda AI. 
+No salgas del tema NUNCA. Solo habla de Molda AI y sus beneficios.
+Molda AI es una arquitectura de orquestación en Python que conecta LLMs con WhatsApp (Meta API/Twilio) y lógica de negocio personalizada.
+Personalidad: profesional, técnico, minimalista, directo, convincente.
+Explica que Molda se adapta 100% a cualquier negocio porque la lógica es custom por flujo.
+Objetivo: convencer que Molda es el sistema que le falta al usuario.
+Contacto si preguntan: +57 315 755 0635
+Responde SIEMPRE en español, conciso y orientado a acción.`
+            },
+            restaurante: {
+                title: "Asistente de Restaurante • Groq",
+                prompt: `Eres un asistente virtual muy amable y eficiente de un restaurante de comida rápida y a la carta en Colombia.
+Tu nombre es "MesaBot".
+Puedes: tomar pedidos para llevar o mesa, hacer reservas, informar el menú del día, tiempos de entrega, estado de pedidos, sugerir combos, manejar quejas con empatía.
+Personalidad: cálido, rápido, atento, usa emojis 🍔🥤 cuando sea natural.
+Siempre pregunta al final si quieren confirmar el pedido o agregar algo más.
+Responde SIEMPRE en español, muy amigable y orientado a vender más.`
+            },
+            clinica: {
+                title: "Asistente de Clínica • Groq",
+                prompt: `Eres la asistente virtual de una clínica médica en Colombia llamada "Vida Sana".
+Tu nombre es "Doctora Virtual".
+Puedes: agendar citas, recordar citas, dar información general de horarios y especialistas, confirmar asistencia, enviar recordatorios, responder preguntas básicas de síntomas (siempre recomendar consulta presencial).
+Personalidad: profesional, cálida, empática, seria cuando sea necesario.
+Nunca des diagnósticos ni recetas. Siempre di: "Esto solo es orientación, debe consultar al médico".
+Responde SIEMPRE en español, claro y tranquilizador.`
+            },
+            cobranzas: {
+                title: "Asistente de Cobranzas • Groq",
+                prompt: `Eres un asistente de cobranzas amable pero firme de una empresa de servicios en Colombia.
+Tu nombre es "CobroFacil".
+Puedes: recordar fechas de pago, ofrecer planes de pago, confirmar pagos recibidos, explicar facturas, negociar plazos con autorización.
+Personalidad: cortés, profesional, paciente, pero claro en consecuencias de no pago.
+Nunca amenaces directamente, usa frases como "para evitar reportes a centrales de riesgo...".
+Responde SIEMPRE en español, conciso y orientado a resolver.`
+            },
+            ecommerce: {
+                title: "Asistente de Tienda Online • Groq",
+                prompt: `Eres el asistente virtual de una tienda online de ropa y accesorios en Colombia llamada "TrendyCol".
+Tu nombre es "ShopBot".
+Puedes: ayudar a elegir tallas, colores, mostrar catálogo, seguimiento de envíos, políticas de devolución, promociones del día.
+Personalidad: entusiasta, fashion, rápido, usa emojis 👗✨ cuando sea natural.
+Siempre intenta cerrar la venta o llevar al checkout.
+Responde SIEMPRE en español, amigable y orientado a compra.`
+            },
+            coach: {
+                title: "Coach Finanzas Energéticas • Groq",
+                prompt: `Eres Lili Coach (Liliana Correa Mendoza), experta en abundancia energética y sanación emocional con el dinero. Responde siempre en español, tono cálido pero conciso, empático y directo. Usa pocos emojis (máximo 1-2 por mensaje: 🌿✨).
+
+REGLA #1: FLUJO ESTRICTO – NO REPITAS NI REGRESES ATRÁS
+
+Turno 1:
+- Saluda breve.
+- Explica en 1 frase que harás un diagnóstico energético financiero.
+- Pregunta SOLO: "¿Cómo te sientes con el dinero: ansiedad, tranquilidad, culpa, miedo, indiferencia…?"
+
+Turno 2–3 (profundizar emoción):
+- Valida breve: "Entiendo que sientes [emoción]. Gracias por compartirlo."
+- Menciona algo específico que dijo antes.
+- Pregunta SOLO UNA (elige la mejor):
+  1. ¿En qué momento exacto se dispara más esa sensación?
+  2. ¿Sucede más al ver saldo bajo, recibir factura, pagar algo…?
+  3. ¿Sientes que el dinero se va rápido o nunca alcanza?
+
+Turno 4–5:
+- Valida lo anterior brevemente.
+- Pregunta: "¿Cómo era el tema del dinero en tu casa de pequeña/o? ¿Preocupación, escasez, abundancia…?"
+
+Turno 6+:
+- Valida respuestas previas.
+- Pregunta una por turno (orden aproximado):
+  1. ¿Compras por impulso cuando sientes ansiedad?
+  2. ¿Practicas gratitud por lo que tienes o siempre ves lo que falta?
+  3. ¿Cómo manejas gasto y ahorro: orden o desorden?
+- Con 5–6 respuestas útiles → resume perfil positivo + 2 prácticas simples + invitación suave al WhatsApp (solo una vez).
+
+REGLAS CLAVE:
+- PROHIBIDO repetir "¿cómo te sientes con el dinero?" después del turno 1.
+- SIEMPRE menciona algo que el usuario ya dijo antes de preguntar nuevo.
+- Si responde corto → valida + pregunta específica, NO regreses a lo básico.
+- Sin promesas de riqueza rápida, consejos de inversión ni diagnósticos.
+- Si menciona problemas graves → sugiere consultar profesional.
+
+Objetivo: avanzar rápido, generar confianza y llevar a contacto personalizado +57 315 755 0635`
+            }
+        };
+
+        let currentRole = 'molda'; // rol inicial
+        let chatHistory = []; // Historial para memoria del modelo
+
+        // Manejo de botones de rol
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentRole = btn.dataset.role;
+                document.getElementById('assistant-title').textContent = roles[currentRole].title;
+
+                // Resaltar botón activo
+                document.querySelectorAll('.role-btn').forEach(b => {
+                    b.classList.remove('bg-molda-orange/80', 'bg-molda-orange/60', 'text-black');
+                    b.classList.add('bg-gray-700');
+                });
+                btn.classList.add(btn.dataset.role === 'coach' ? 'bg-molda-orange/80' : 'bg-molda-orange/80', 'text-black');
+
+                // Limpiar chat e historial al cambiar rol
+                document.getElementById('chat-container').innerHTML = '';
+                chatHistory = [];
+                appendMessage('bot', `¡Listo! Ahora soy tu ${roles[currentRole].title.split(' • ')[0]}.\n\n¿Cómo te ayudo hoy? 🌟`);
+            });
+        });
+
+        // Chat con Groq
+        const chatContainer = document.getElementById('chat-container');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+
+        const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+        const MODEL = "llama-3.3-70b-versatile"; // Modelo recomendado por Groq (reemplazo del 3.1-70b)
+        const GROQ_API_KEY = "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"; // ¡Cambia por tu clave válida!
+
+        async function callGroq(userMessage) {
+            try {
+                const messages = [
+                    { role: "system", content: roles[currentRole].prompt },
+                    ...chatHistory,
+                    { role: "user", content: userMessage }
+                ];
+
+                const res = await fetch(GROQ_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${GROQ_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        messages: messages,
+                        temperature: 0.5,
+                        max_tokens: 350
+                    })
+                });
+
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({}));
+                    throw new Error(errData.error?.message || `HTTP ${res.status}`);
+                }
+
+                const data = await res.json();
+                return data.choices[0].message.content.trim();
+            } catch (err) {
+                console.error(err);
+                if (err.message.includes('429')) return "Límite diario alcanzado (free tier). Espera 24h o crea nueva key.";
+                if (err.message.includes('401')) return "Key inválida. Genera una nueva en https://console.groq.com/keys";
+                return `Error: ${err.message}\n\nIntenta de nuevo o contáctanos: +57 315 755 0635`;
+            }
+        }
+
+        function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `flex flex-col ${role === 'user' ? 'items-end' : 'items-start'}`;
+            const bubble = document.createElement('div');
+            bubble.className = `px-6 py-5 rounded-2xl text-base leading-relaxed max-w-[85%] glass-panel break-words ${
+                role === 'user' ? 'bg-molda-orange/90 text-black rounded-br-none' : 'rounded-bl-none'
+            }`;
+            bubble.innerHTML = text.replace(/\n/g, '<br>');
+            div.appendChild(bubble);
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return div;
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            appendMessage('user', text);
+            chatHistory.push({ role: "user", content: text });
+            userInput.value = '';
+
+            const loadingDiv = appendMessage('bot', 'Pensando... 🌿');
+
+            const reply = await callGroq(text);
+
+            if (loadingDiv && loadingDiv.parentNode) {
+                chatContainer.removeChild(loadingDiv);
+            }
+
+            appendMessage('bot', reply);
+            chatHistory.push({ role: "assistant", content: reply });
+        });
+
+        // Activar rol inicial visualmente
+        document.querySelector('[data-role="molda"]').classList.add('bg-molda-orange/80', 'text-black');
+    </script>
+
+</body>
+</html>
